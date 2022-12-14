@@ -6,13 +6,15 @@ import (
 	"fmt"
 	"io/ioutil"
 	"log"
+	"os"
 
 	secretmanager "cloud.google.com/go/secretmanager/apiv1"
 	"cloud.google.com/go/secretmanager/apiv1/secretmanagerpb"
 	"gopkg.in/yaml.v3"
 )
 
-var file = flag.String("variables", "variables.yml", "Path of file that contains variables to inject")
+var config = flag.String("config", "config.yml", "Path of file that contains variables to inject")
+var profile = flag.String("profile", "default", "Profile to load variables from")
 
 type Secret struct {
 	Variable string `yaml:"VARIABLE"`
@@ -21,8 +23,14 @@ type Secret struct {
 
 func main() {
 	flag.Parse()
-	variables := []Secret{}
-	file, err := ioutil.ReadFile(*file)
+	if _profile := os.Getenv("SECRET_PROFILE"); _profile != "" {
+		*profile = _profile
+	}
+	if _config := os.Getenv("CONFIG_FILE"); _config != "" {
+		*config = _config
+	}
+	variables := map[string][]Secret{}
+	file, err := ioutil.ReadFile(*config)
 	if err != nil {
 		log.Fatalf("Could not read the file due to this %s error \n", err)
 	}
@@ -36,8 +44,10 @@ func main() {
 		log.Fatalf("failed to setup client: %v", err)
 	}
 	defer client.Close()
-
-	for _, v := range variables {
+	if _, ok := variables[*profile]; !ok {
+		log.Fatalf("Profile %s is not present on config file\n", *profile)
+	}
+	for _, v := range variables[*profile] {
 		accessRequest := &secretmanagerpb.AccessSecretVersionRequest{
 			Name: v.SecretId,
 		}

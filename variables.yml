@@ -1,4 +1,0 @@
-- VARIABLE: VARIABLE1
-  SECRET_ID: projects/*/secrets/dburl/versions/latest
-- VARIABLE: VARIABLE2
-  SECRET_ID: projects/*/secrets/dbname/versions/latest

@@ -1,0 +1,5 @@
+default:
+  - VARIABLE: DB_URL
+    SECRET_ID: projects/*/secrets/dburl/versions/latest
+  - VARIABLE: DB_NAME
+    SECRET_ID: projects/*/secrets/dbname/versions/latest

@@ -10,6 +10,6 @@ go build main.go
 Check variables.yml for example.
 
 ```bash
-eval $(./main --variables variables.yml)
+eval $(./main --config config.yml --profile profile)
 
 ```
