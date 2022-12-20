@@ -55,7 +55,7 @@ func main() {
 		if err != nil {
 			log.Fatalf("failed to access secret version: %v", err)
 		}
-		fmt.Printf("%s=\"%s\"\n", v.Variable, result.Payload.GetData())
+		fmt.Printf("export %s=\"%s\"\n", v.Variable, result.Payload.GetData())
 	}
 
 }
