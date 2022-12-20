@@ -1,5 +1,4 @@
-# entrypoint.sh
-#!/bin/sh
+#!/bin/bash
 
 set -e
 eval $(main)
